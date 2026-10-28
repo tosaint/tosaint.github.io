@@ -31,12 +31,12 @@
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 html, body { overflow-x: clip; }
-body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.65 var(--sans); padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.65 var(--sans); padding: max(48px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); }
 a { color: inherit; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
 
 /* the drawing sheet: one hairline frame with a title block along the bottom */
-.sheet { position: relative; min-height: 100%; max-width: 1280px; margin: 0 auto; border: 1px solid var(--hair); display: grid; grid-template-rows: auto 1fr auto; }
+.sheet { position: relative; min-height: 100%; max-width: 1080px; margin: 0 auto; border: 1px solid var(--hair); display: grid; grid-template-rows: auto 1fr auto; }
 .sheet::before, .sheet::after { content: ""; position: absolute; width: 11px; height: 11px; border-color: var(--ink-2); border-style: solid; pointer-events: none; }
 .sheet::before { top: -6px; left: -6px; border-width: 1px 0 0 1px; }
 .sheet::after { bottom: -6px; right: -6px; border-width: 0 1px 1px 0; }
@@ -87,8 +87,10 @@ h1 .zh { display: inline-block; font: 300 clamp(24px, 3.6vw, 44px)/1 var(--zh); 
 .ig:hover span { text-decoration: underline; text-underline-offset: 3px; }
 
 @media (max-width: 820px) {
-  .field { grid-template-columns: 1fr; padding-block: 150px 32px; }
-  .water { position: absolute; top: -56px; right: -64px; width: 320px; max-width: none; margin: 0; }
+  body { padding: max(96px, env(safe-area-inset-top)) max(40px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(40px, env(safe-area-inset-left)); }
+  .field { grid-template-columns: 1fr; padding-block: 96px 32px; }
+  /* the ripples sit on the sheet's top-right corner and spill out of the frame */
+  .water { position: absolute; top: -175px; right: -115px; width: 310px; max-width: none; margin: 0; }
   .text { position: relative; }
   .block { grid-template-columns: 1fr 1fr; }
   .cell.now { grid-column: 1 / -1; }
