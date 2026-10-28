@@ -42,21 +42,8 @@ a:focus-visible, button:focus-visible { outline: 1px solid var(--ink-2); outline
 .theme:hover { opacity: 1; }
 
 main { position: relative; z-index: 1; align-self: end; display: grid; gap: 28px; padding-bottom: clamp(48px, 10vh, 120px); }
-h1 { margin: 0; font: 400 clamp(46px, 7.5vw, 104px)/.95 var(--serif); letter-spacing: -.01em; color: var(--ink-2); opacity: .7; }
-h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); letter-spacing: .3em; margin-left: .35em; opacity: .8; }
-
-/* 水聲木, resting on the water */
-.leaf-title { position: absolute; z-index: 1; top: 47vh; right: 31vw; margin: 0; font: 300 15px/1 var(--zh); letter-spacing: .6em; color: var(--ink-2); opacity: .55; }
-
-/* each character surfaces out of the mist and settles a few pixels, nothing more */
-.f { display: inline-block; animation: settle var(--dur) cubic-bezier(.22,.61,.36,1) var(--del) both; }
-.f > i { font-style: normal; }
-@keyframes settle {
-  0%   { opacity: 0; filter: blur(4px); transform: translateY(-14px); }
-  60%  { filter: blur(0); }
-  100% { opacity: 1; filter: blur(0); transform: none; }
-}
-@media (prefers-reduced-motion: reduce) { .f { animation: none; } }
+h1 { margin: 0; font: 400 clamp(46px, 7.5vw, 104px)/.95 var(--serif); letter-spacing: -.01em; }
+h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); letter-spacing: .3em; color: var(--ink-2); margin-left: .35em; }
 
 .enter { display: flex; align-items: center; gap: 16px; width: min(22em, 100%); padding-block: 6px; text-decoration: none; font: 400 12px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); }
 .enter .line { flex: 1; height: 1px; background: currentColor; position: relative; transform-origin: left; transition: transform .6s ease; transform: scaleX(.8); opacity: .7; }
@@ -86,7 +73,6 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
 
 @media (max-width: 720px) {
   .water { top: -4vh; right: -48vw; width: 135vw; }
-  .leaf-title { top: 40vh; right: 14vw; font-size: 14px; }
 }
 </style>
 </head>
@@ -108,10 +94,8 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
       <g class="drop" style="--t:18.2s;--d:-13.5s;--o:0.23"><circle style="--k:0" cx="528" cy="207" r="30"/></g>
     </svg>
 
-  <p class="leaf-title" lang="zh-Hant" aria-label="水聲木" data-fall="0.2">水聲木</p>
-
   <main>
-    <h1 aria-label="tosaint 余致賢"><span data-fall="1.4">tosaint</span> <span class="zh" lang="zh-Hant" data-fall="3.2">余致賢</span></h1>
+    <h1>tosaint <span class="zh" lang="zh-Hant">余致賢</span></h1>
     <a class="enter" href="/portfolio/">Portfolio <span class="line" aria-hidden="true"></span></a>
   </main>
 
@@ -122,25 +106,6 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
   </footer>
 </div>
 <script>
-// split each [data-fall] into characters that fall like leaves, each with its own sway, spin and timing
-(function () {
-  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  document.querySelectorAll("[data-fall]").forEach(function (el) {
-    var start = parseFloat(el.dataset.fall) || 0, text = el.textContent;
-    el.textContent = "";
-    Array.from(text).forEach(function (ch, i) {
-      var s = document.createElement("span"), inner = document.createElement("i");
-      s.className = "f"; s.setAttribute("aria-hidden", "true");
-      inner.textContent = ch; s.appendChild(inner);
-      if (!reduce) {
-        var r = function (a, b) { return a + Math.random() * (b - a); };
-        s.style.setProperty("--del", (start + i * .28 + r(0, .2)).toFixed(2) + "s");
-        s.style.setProperty("--dur", r(3.2, 4).toFixed(2) + "s");
-      }
-      el.appendChild(s);
-    });
-  });
-})();
 (function () {
   var btn = document.getElementById("theme"), root = document.documentElement, saved = null;
   try { saved = localStorage.getItem("theme"); } catch (e) {}
