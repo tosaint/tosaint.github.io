@@ -61,22 +61,18 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
 /* the ripples float free in the upper right, and are allowed to leave the screen */
 .water { position: absolute; top: -6vh; right: -14vw; width: min(78vw, 1000px); height: auto; color: var(--ink-2); overflow: visible; pointer-events: none; z-index: 0; }
 .water circle { vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; opacity: 0;
-  animation: drop var(--t) ease-in-out calc(var(--d) + var(--k) * .9s) infinite; }
+  animation: drop var(--t) cubic-bezier(.45,0,.55,1) calc(var(--d) + var(--k) * 1.6s) infinite; }
 @keyframes drop {
-  0%   { opacity: 0; transform: scale(.82); }
-  35%  { opacity: var(--o); transform: scale(.97); }
-  60%  { opacity: calc(var(--o) * .75); transform: scale(1.03); }
-  80%  { opacity: calc(var(--o) * .85); transform: scale(1.06); }
-  100% { opacity: 0; transform: scale(1.14); }
+  0%   { opacity: 0; transform: scale(.9); }
+  40%  { opacity: var(--o); transform: scale(1); }
+  70%  { opacity: calc(var(--o) * .8); transform: scale(1.04); }
+  100% { opacity: 0; transform: scale(1.1); }
+}
 }
 @media (prefers-reduced-motion: reduce) { .water circle { animation: none; opacity: .22; } }
 
-/* the piece's name, set vertically beside the water */
-.caption { position: absolute; z-index: 1; right: max(clamp(28px, 7vw, 96px), env(safe-area-inset-right)); top: 42vh; display: flex; flex-direction: column; gap: .7em; font: 400 14px/1 var(--zh); color: var(--ink-2); opacity: .6; margin: 0; }
-
 @media (max-width: 720px) {
   .water { top: -4vh; right: -48vw; width: 135vw; }
-  .caption { top: auto; bottom: 34vh; }
 }
 </style>
 </head>
@@ -86,18 +82,17 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
 
   <!-- 水聲木 (own work): each turned piece, in plan, drawn only as rings that rise and fade like ripples -->
   <svg class="water" viewBox="120 150 1140 1080" fill="none" stroke="currentColor" stroke-width=".5" role="img" aria-label="水聲木 in plan: rings that rise and fade where each turned wooden piece lies, like ripples on water">
-      <g class="drop" style="--t:12.1s;--d:-9.0s;--o:0.3"><circle style="--k:0" cx="520" cy="620" r="110.2"/><circle style="--k:1" cx="520" cy="620" r="245"/></g>
-      <g class="drop" style="--t:13.7s;--d:-10.1s;--o:0.31"><circle style="--k:0" cx="617" cy="990" r="118.0"/><circle style="--k:1" cx="617" cy="990" r="236"/></g>
-      <g class="drop" style="--t:9.1s;--d:-4.2s;--o:0.31"><circle style="--k:0" cx="740" cy="395" r="84.0"/><circle style="--k:1" cx="740" cy="395" r="168"/></g>
-      <g class="drop" style="--t:12.2s;--d:-11.0s;--o:0.21"><circle style="--k:0" cx="335" cy="440" r="138"/></g>
-      <g class="drop" style="--t:11.3s;--d:-2.8s;--o:0.27"><circle style="--k:0" cx="1075" cy="420" r="100"/></g>
-      <g class="drop" style="--t:11.9s;--d:-0.2s;--o:0.23"><circle style="--k:0" cx="825" cy="655" r="84"/></g>
-      <g class="drop" style="--t:10.4s;--d:-9.5s;--o:0.29"><circle style="--k:0" cx="875" cy="1130" r="78"/></g>
-      <g class="drop" style="--t:9.8s;--d:-7.8s;--o:0.22"><circle style="--k:0" cx="582" cy="290" r="60"/></g>
-      <g class="drop" style="--t:12.1s;--d:-1.5s;--o:0.2"><circle style="--k:0" cx="1165" cy="585" r="64"/></g>
-      <g class="drop" style="--t:13.4s;--d:-2.8s;--o:0.23"><circle style="--k:0" cx="528" cy="207" r="30"/></g>
+      <g class="drop" style="--t:15.9s;--d:-8.7s;--o:0.3"><circle style="--k:0" cx="520" cy="620" r="110.2"/><circle style="--k:1" cx="520" cy="620" r="245"/></g>
+      <g class="drop" style="--t:17.0s;--d:-10.3s;--o:0.31"><circle style="--k:0" cx="617" cy="990" r="118.0"/><circle style="--k:1" cx="617" cy="990" r="236"/></g>
+      <g class="drop" style="--t:19.0s;--d:-1.2s;--o:0.31"><circle style="--k:0" cx="740" cy="395" r="84.0"/><circle style="--k:1" cx="740" cy="395" r="168"/></g>
+      <g class="drop" style="--t:14.1s;--d:-11.8s;--o:0.21"><circle style="--k:0" cx="335" cy="440" r="138"/></g>
+      <g class="drop" style="--t:16.1s;--d:-3.8s;--o:0.27"><circle style="--k:0" cx="1075" cy="420" r="100"/></g>
+      <g class="drop" style="--t:22.0s;--d:-10.3s;--o:0.23"><circle style="--k:0" cx="825" cy="655" r="84"/></g>
+      <g class="drop" style="--t:20.7s;--d:-9.9s;--o:0.29"><circle style="--k:0" cx="875" cy="1130" r="78"/></g>
+      <g class="drop" style="--t:19.1s;--d:-2.9s;--o:0.22"><circle style="--k:0" cx="582" cy="290" r="60"/></g>
+      <g class="drop" style="--t:19.1s;--d:-16.6s;--o:0.2"><circle style="--k:0" cx="1165" cy="585" r="64"/></g>
+      <g class="drop" style="--t:18.2s;--d:-13.5s;--o:0.23"><circle style="--k:0" cx="528" cy="207" r="30"/></g>
     </svg>
-  <p class="caption" lang="zh-Hant" aria-label="水聲木"><span>水</span><span>聲</span><span>木</span></p>
 
   <main>
     <h1>tosaint <span class="zh" lang="zh-Hant">余致賢</span></h1>
@@ -108,7 +103,6 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
     <a class="ig" href="https://www.instagram.com/tosaint" target="_blank" rel="noopener" aria-label="Instagram: @tosaint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor" stroke="none"/></svg>
       </a>
-    <a href="/portfolio/projects/seen-through/model/?study=1">Survey →</a>
   </footer>
 </div>
 <script>
