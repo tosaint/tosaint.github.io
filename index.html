@@ -16,70 +16,60 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500&family=Noto+Serif+TC:wght@300;400&display=swap">
 <style>
 :root {
-  --ground: #101213; --ink: #e6e4de; --ink-2: #9a9d9b; --hair: #2b2f30; --brass: #c4a96a; --light: #e6e4de1f;
-  --serif: "Bodoni Moda", "Didot", "Noto Serif TC", Georgia, serif;
+  --ground: #141412; --ink: #e8e5de; --ink-2: #8e8a82;
+  --serif: "Noto Serif TC", "Songti TC", serif;
   --sans: "IBM Plex Sans", "Noto Sans TC", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --zh: "Noto Serif TC", "Songti TC", serif;
+  --edge: clamp(28px, 7vw, 96px); --foot: clamp(24px, 5vh, 48px);
   color-scheme: dark;
 }
 @media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) { --ground: #eceeed; --ink: #151819; --ink-2: #5b6162; --hair: #c8cdcc; --brass: #86692b; --light: #ffffffcc; color-scheme: light; }
+  :root:not([data-theme="dark"]) { --ground: #f3f1ec; --ink: #2b2a27; --ink-2: #8b877e; color-scheme: light; }
 }
-:root[data-theme="light"] { --ground: #eceeed; --ink: #151819; --ink-2: #5b6162; --hair: #c8cdcc; --brass: #86692b; --light: #ffffffcc; color-scheme: light; }
+:root[data-theme="light"] { --ground: #f3f1ec; --ink: #2b2a27; --ink-2: #8b877e; color-scheme: light; }
 
 * { box-sizing: border-box; }
-html, body { min-height: 100%; overflow-x: clip; }
-body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.65 var(--sans); }
-a { color: inherit; }
-a:focus-visible, button:focus-visible { outline: 1px solid var(--ink-2); outline-offset: 4px; }
+html, body { margin: 0; min-height: 100%; overflow: hidden; }
+body { background: var(--ground); color: var(--ink); font: 400 11px/1.6 var(--sans); letter-spacing: .14em;
+  min-height: 100vh; min-height: 100svh; -webkit-tap-highlight-color: transparent; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible, button:focus-visible { outline: 1px solid var(--ink-2); outline-offset: 5px; }
 
-/* nothing but white space, a name, and the water */
-.page { position: relative; min-height: 100vh; min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto;
-  padding: max(28px, env(safe-area-inset-top)) max(clamp(28px, 7vw, 96px), env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(clamp(28px, 7vw, 96px), env(safe-area-inset-left)); }
-
-.theme { justify-self: end; position: relative; z-index: 2; font: 400 11px var(--mono); letter-spacing: .18em; text-transform: uppercase; background: none; border: 0; padding: 4px 0; color: var(--ink-2); cursor: pointer; opacity: .7; }
-.theme:hover { opacity: 1; }
-
-main { position: relative; z-index: 1; align-self: end; display: grid; gap: 28px; padding-bottom: clamp(48px, 10vh, 120px); }
-h1 { margin: 0; font: 400 clamp(46px, 7.5vw, 104px)/.95 var(--serif); letter-spacing: -.01em; }
-h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); letter-spacing: .3em; color: var(--ink-2); margin-left: .35em; }
-
-.enter { display: flex; align-items: center; gap: 16px; width: min(22em, 100%); padding-block: 6px; text-decoration: none; font: 400 12px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); }
-.enter .line { flex: 1; height: 1px; background: currentColor; position: relative; transform-origin: left; transition: transform .6s ease; transform: scaleX(.8); opacity: .7; }
-.enter .line::after { content: ""; position: absolute; right: -1px; top: -4px; width: 9px; height: 9px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
-.enter:hover { color: var(--ink); }
-.enter:hover .line, .enter:focus-visible .line { transform: scaleX(1); }
-@media (prefers-reduced-motion: reduce) { .enter .line { transition: none; } }
-
-.quiet { position: relative; z-index: 1; display: flex; align-items: center; gap: 28px; font: 400 11px var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-2); }
-.quiet a { text-decoration: none; opacity: .75; }
-.quiet a:hover { opacity: 1; color: var(--ink); }
-.ig { display: inline-flex; }
-.ig svg { width: 18px; height: 18px; }
-
-/* the ripples float free in the upper right, and are allowed to leave the screen */
-.water { position: absolute; top: -6vh; right: -14vw; width: min(78vw, 1000px); height: auto; color: var(--ink-2); overflow: visible; pointer-events: none; z-index: 0; }
-.water circle { vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; opacity: 0;
-  animation: drop var(--t) cubic-bezier(.45,0,.55,1) calc(var(--d) + var(--k) * 1.6s) infinite; }
+/* 間: the water in the middle, a seal of a name at the right, small words at the edges */
+.water { position: fixed; left: 50%; top: 46%; width: min(62vw, 720px); height: auto; transform: translate(-50%, -50%);
+  color: var(--ink-2); overflow: visible; pointer-events: none; }
+.water circle, .tap circle { vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; }
+.water circle { opacity: 0; animation: drop var(--t) cubic-bezier(.45,0,.55,1) calc(var(--d) + var(--k) * 1.6s) infinite; }
 @keyframes drop {
   0%   { opacity: 0; transform: scale(.9); }
   40%  { opacity: var(--o); transform: scale(1); }
   70%  { opacity: calc(var(--o) * .8); transform: scale(1.04); }
   100% { opacity: 0; transform: scale(1.1); }
 }
-}
-@media (prefers-reduced-motion: reduce) { .water circle { animation: none; opacity: .22; } }
 
-@media (max-width: 720px) {
-  .water { top: -4vh; right: -48vw; width: 135vw; }
-}
+.seal { position: fixed; right: var(--edge); top: clamp(64px, 14vh, 140px); margin: 0; display: flex; gap: 14px; align-items: flex-start; font-weight: 400; }
+.seal .zh { display: flex; flex-direction: column; gap: .55em; font: 300 clamp(19px, 1.7vw, 24px)/1 var(--serif); letter-spacing: 0; color: var(--ink); }
+.seal .en { writing-mode: vertical-rl; font: 400 10px/1 var(--mono); letter-spacing: .3em; color: var(--ink-2); margin-top: 2px; }
+
+.edge { position: fixed; text-transform: uppercase; color: var(--ink-2); }
+.edge:hover { color: var(--ink); }
+.theme { top: var(--foot); left: var(--edge); background: none; border: 0; padding: 0; font: inherit; letter-spacing: inherit; cursor: pointer; }
+.enter { bottom: var(--foot); left: var(--edge); }
+.ig { bottom: var(--foot); right: var(--edge); display: inline-flex; }
+.ig svg { width: 16px; height: 16px; }
+
+/* touching the page drops a stone: a few rings open where the finger lands */
+.tap { position: fixed; width: 240px; height: 240px; margin: -120px 0 0 -120px; overflow: visible; pointer-events: none; color: var(--ink-2); }
+.tap circle { opacity: 0; animation: ring 3.6s cubic-bezier(.2,.6,.3,1) forwards; }
+.tap circle:nth-child(2) { animation-delay: .45s; }
+.tap circle:nth-child(3) { animation-delay: .9s; }
+@keyframes ring { 0% { opacity: .55; transform: scale(.08); } 100% { opacity: 0; transform: scale(1); } }
+
+@media (max-width: 720px) { .water { width: 118vw; top: 44%; } }
+@media (prefers-reduced-motion: reduce) { .water circle { animation: none; opacity: .22; } }
 </style>
 </head>
 <body>
-<div class="page">
-  <button class="theme" id="theme" type="button" aria-label="Switch colour theme">Light</button>
-
   <!-- 水聲木 (own work): each turned piece, in plan, drawn only as rings that rise and fade like ripples -->
   <svg class="water" viewBox="120 150 1140 1080" fill="none" stroke="currentColor" stroke-width=".5" role="img" aria-label="水聲木 in plan: rings that rise and fade where each turned wooden piece lies, like ripples on water">
       <g class="drop" style="--t:15.9s;--d:-8.7s;--o:0.3"><circle style="--k:0" cx="520" cy="620" r="110.2"/><circle style="--k:1" cx="520" cy="620" r="245"/></g>
@@ -94,17 +84,14 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
       <g class="drop" style="--t:18.2s;--d:-13.5s;--o:0.23"><circle style="--k:0" cx="528" cy="207" r="30"/></g>
     </svg>
 
-  <main>
-    <h1>tosaint <span class="zh" lang="zh-Hant">余致賢</span></h1>
-    <a class="enter" href="/portfolio/">Portfolio <span class="line" aria-hidden="true"></span></a>
-  </main>
+<h1 class="seal" aria-label="tosaint 余致賢"><span class="en" aria-hidden="true">TOSAINT</span><span class="zh" lang="zh-Hant" aria-hidden="true"><span>余</span><span>致</span><span>賢</span></span></h1>
 
-  <footer class="quiet">
-    <a class="ig" href="https://www.instagram.com/tosaint" target="_blank" rel="noopener" aria-label="Instagram: @tosaint">
+<button class="edge theme" id="theme" type="button" aria-label="Switch colour theme">Light</button>
+<a class="edge enter" href="/portfolio/">Portfolio →</a>
+<a class="edge ig" href="https://www.instagram.com/tosaint" target="_blank" rel="noopener" aria-label="Instagram: @tosaint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor" stroke="none"/></svg>
       </a>
-  </footer>
-</div>
+
 <script>
 (function () {
   var btn = document.getElementById("theme"), root = document.documentElement, saved = null;
@@ -117,6 +104,25 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
     root.dataset.theme = current() === "dark" ? "light" : "dark";
     try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
     label();
+  });
+
+  // a ripple where the page is touched; links and the button keep their own job
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var NS = "http://www.w3.org/2000/svg";
+  document.addEventListener("pointerdown", function (e) {
+    if (e.target.closest("a, button")) return;
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "tap"); svg.setAttribute("viewBox", "0 0 240 240");
+    svg.setAttribute("fill", "none"); svg.setAttribute("stroke", "currentColor"); svg.setAttribute("stroke-width", ".6");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.left = e.clientX + "px"; svg.style.top = e.clientY + "px";
+    for (var i = 0; i < 3; i++) {
+      var c = document.createElementNS(NS, "circle");
+      c.setAttribute("cx", 120); c.setAttribute("cy", 120); c.setAttribute("r", 118 - i * 26);
+      svg.appendChild(c);
+    }
+    document.body.appendChild(svg);
+    setTimeout(function () { svg.remove(); }, 5000);
   });
 })();
 </script>
