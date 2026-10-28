@@ -48,18 +48,23 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
 /* 水聲木, resting on the water */
 .leaf-title { position: absolute; z-index: 1; top: 47vh; right: 31vw; margin: 0; font: 300 15px/1 var(--zh); letter-spacing: .6em; color: var(--ink-2); opacity: .55; }
 
-/* each character drifts down like a falling leaf, swaying, then settles */
-.f { display: inline-block; will-change: transform, opacity; animation: fall var(--dur) cubic-bezier(.3,.1,.4,1) var(--del) both; }
-@keyframes fall {
-  0%   { opacity: 0; transform: translate(var(--x), var(--h)) rotate(var(--r)); }
-  12%  { opacity: 1; }
-  30%  { transform: translate(calc(var(--x) * -.7), calc(var(--h) * .68)) rotate(calc(var(--r) * -.6)); }
-  52%  { transform: translate(calc(var(--x) * .45), calc(var(--h) * .38)) rotate(calc(var(--r) * .4)); }
-  74%  { transform: translate(calc(var(--x) * -.2), calc(var(--h) * .13)) rotate(calc(var(--r) * -.2)); }
-  90%  { transform: translate(calc(var(--x) * .06), calc(var(--h) * .02)) rotate(calc(var(--r) * .05)); }
-  100% { opacity: 1; transform: none; }
+/* each character drifts down like a leaf: one unbroken descent that slows as it lands,
+   with a separate pendulum sway that eases at every turn and fades out */
+.f { display: inline-block; animation: descend var(--dur) cubic-bezier(.25,.55,.3,1) var(--del) both; }
+.f > i { display: inline-block; font-style: normal; animation: sway var(--dur) ease-in-out var(--del) both; }
+@keyframes descend {
+  0%   { opacity: 0; filter: blur(3px); transform: translateY(var(--h)); }
+  35%  { opacity: .9; filter: blur(0); }
+  100% { opacity: 1; filter: blur(0); transform: none; }
 }
-@media (prefers-reduced-motion: reduce) { .f { animation: none; } }
+@keyframes sway {
+  0%   { transform: translateX(0) rotate(0); }
+  22%  { transform: translateX(var(--x)) rotate(var(--r)); animation-timing-function: ease-in-out; }
+  48%  { transform: translateX(calc(var(--x) * -.55)) rotate(calc(var(--r) * -.5)); }
+  72%  { transform: translateX(calc(var(--x) * .22)) rotate(calc(var(--r) * .18)); }
+  100% { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .f, .f > i { animation: none; } }
 
 .enter { display: flex; align-items: center; gap: 16px; width: min(22em, 100%); padding-block: 6px; text-decoration: none; font: 400 12px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); }
 .enter .line { flex: 1; height: 1px; background: currentColor; position: relative; transform-origin: left; transition: transform .6s ease; transform: scaleX(.8); opacity: .7; }
@@ -132,15 +137,17 @@ h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); 
     var start = parseFloat(el.dataset.fall) || 0, text = el.textContent;
     el.textContent = "";
     Array.from(text).forEach(function (ch, i) {
-      var s = document.createElement("span");
-      s.className = "f"; s.textContent = ch; s.setAttribute("aria-hidden", "true");
+      var s = document.createElement("span"), inner = document.createElement("i");
+      s.className = "f"; s.setAttribute("aria-hidden", "true");
+      inner.textContent = ch; s.appendChild(inner);
       if (!reduce) {
         var r = function (a, b) { return a + Math.random() * (b - a); };
-        s.style.setProperty("--del", (start + i * r(.15, .35) + r(0, .4)).toFixed(2) + "s");
-        s.style.setProperty("--dur", r(3.4, 5.2).toFixed(2) + "s");
-        s.style.setProperty("--x", r(-36, 36).toFixed(0) + "px");
-        s.style.setProperty("--h", "-" + r(38, 62).toFixed(0) + "vh");
-        s.style.setProperty("--r", r(-70, 70).toFixed(0) + "deg");
+        var side = Math.random() < .5 ? -1 : 1;
+        s.style.setProperty("--del", (start + i * r(.22, .32) + r(0, .25)).toFixed(2) + "s");
+        s.style.setProperty("--dur", r(5.2, 6.8).toFixed(2) + "s");
+        s.style.setProperty("--h", "-" + r(16, 26).toFixed(0) + "vh");
+        s.style.setProperty("--x", (side * r(8, 16)).toFixed(0) + "px");
+        s.style.setProperty("--r", (side * r(8, 20)).toFixed(0) + "deg");
       }
       el.appendChild(s);
     });
