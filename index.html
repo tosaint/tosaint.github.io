@@ -29,35 +29,37 @@
 :root[data-theme="light"] { --ground: #eceeed; --ink: #151819; --ink-2: #5b6162; --hair: #c8cdcc; --brass: #86692b; --light: #ffffffcc; color-scheme: light; }
 
 * { box-sizing: border-box; }
-html, body { height: 100%; }
-html, body { overflow-x: clip; }
-body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.65 var(--sans); padding: max(48px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); }
+html, body { min-height: 100%; overflow-x: clip; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.65 var(--sans); }
 a { color: inherit; }
-a:focus-visible, button:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 1px solid var(--ink-2); outline-offset: 4px; }
 
-/* the drawing sheet: one hairline frame with a title block along the bottom */
-.sheet { position: relative; min-height: 100%; max-width: 1080px; margin: 0 auto; border: 1px solid var(--hair); display: grid; grid-template-rows: auto 1fr auto; }
-.sheet::before, .sheet::after { content: ""; position: absolute; width: 11px; height: 11px; border-color: var(--ink-2); border-style: solid; pointer-events: none; }
-.sheet::before { top: -6px; left: -6px; border-width: 1px 0 0 1px; }
-.sheet::after { bottom: -6px; right: -6px; border-width: 0 1px 1px 0; }
+/* nothing but white space, a name, and the water */
+.page { position: relative; min-height: 100vh; min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto;
+  padding: max(28px, env(safe-area-inset-top)) max(clamp(28px, 7vw, 96px), env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(clamp(28px, 7vw, 96px), env(safe-area-inset-left)); }
 
-.bar { display: flex; justify-content: space-between; align-items: center; padding: 14px clamp(18px, 4vw, 40px); border-bottom: 1px solid var(--hair); font: 400 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
-.theme { font: inherit; letter-spacing: inherit; text-transform: inherit; background: none; border: 1px solid var(--hair); color: var(--ink-2); border-radius: 0; padding: 3px 8px; cursor: pointer; }
-.theme:hover { color: var(--ink); border-color: var(--ink-2); }
+.theme { justify-self: end; position: relative; z-index: 2; font: 400 11px var(--mono); letter-spacing: .18em; text-transform: uppercase; background: none; border: 0; padding: 4px 0; color: var(--ink-2); cursor: pointer; opacity: .7; }
+.theme:hover { opacity: 1; }
 
-.field { position: relative; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); align-items: center; gap: clamp(24px, 5vw, 72px); padding: clamp(40px, 6vw, 88px) clamp(18px, 4vw, 40px); }
-.text { display: grid; gap: 30px; min-width: 0; }
-h1 { margin: 0; font: 400 clamp(52px, 9vw, 120px)/.95 var(--serif); letter-spacing: -.01em; }
-h1 .zh { display: inline-block; font: 300 clamp(24px, 3.6vw, 44px)/1 var(--zh); letter-spacing: .2em; color: var(--ink-2); margin-left: .25em; }
+main { position: relative; z-index: 1; align-self: end; display: grid; gap: 28px; padding-bottom: clamp(48px, 10vh, 120px); }
+h1 { margin: 0; font: 400 clamp(46px, 7.5vw, 104px)/.95 var(--serif); letter-spacing: -.01em; }
+h1 .zh { display: inline-block; font: 300 clamp(20px, 2.8vw, 36px)/1 var(--zh); letter-spacing: .3em; color: var(--ink-2); margin-left: .35em; }
 
-/* the entrance: a drawn dimension line that runs to the door */
-.enter { display: flex; align-items: center; gap: 16px; max-width: 30em; padding-block: 6px; text-decoration: none; font: 400 13px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
-.enter .line { flex: 1; height: 1px; background: var(--ink); position: relative; transform-origin: left; transition: transform .45s ease; transform: scaleX(.86); }
-.enter .line::after { content: ""; position: absolute; right: -1px; top: -4px; width: 9px; height: 9px; border-top: 1px solid var(--ink); border-right: 1px solid var(--ink); transform: rotate(45deg); }
+.enter { display: flex; align-items: center; gap: 16px; width: min(22em, 100%); padding-block: 6px; text-decoration: none; font: 400 12px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); }
+.enter .line { flex: 1; height: 1px; background: currentColor; position: relative; transform-origin: left; transition: transform .6s ease; transform: scaleX(.8); opacity: .7; }
+.enter .line::after { content: ""; position: absolute; right: -1px; top: -4px; width: 9px; height: 9px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
+.enter:hover { color: var(--ink); }
 .enter:hover .line, .enter:focus-visible .line { transform: scaleX(1); }
 @media (prefers-reduced-motion: reduce) { .enter .line { transition: none; } }
 
-.water { position: absolute; top: -190px; right: -300px; width: 760px; height: auto; color: var(--ink-2); overflow: visible; pointer-events: none; }
+.quiet { position: relative; z-index: 1; display: flex; align-items: center; gap: 28px; font: 400 11px var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-2); }
+.quiet a { text-decoration: none; opacity: .75; }
+.quiet a:hover { opacity: 1; color: var(--ink); }
+.ig { display: inline-flex; }
+.ig svg { width: 18px; height: 18px; }
+
+/* the ripples float free in the upper right, and are allowed to leave the screen */
+.water { position: absolute; top: -6vh; right: -14vw; width: min(78vw, 1000px); height: auto; color: var(--ink-2); overflow: visible; pointer-events: none; z-index: 0; }
 .water circle { vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; opacity: 0;
   animation: drop var(--t) ease-in-out calc(var(--d) + var(--k) * .9s) infinite; }
 @keyframes drop {
@@ -69,45 +71,21 @@ h1 .zh { display: inline-block; font: 300 clamp(24px, 3.6vw, 44px)/1 var(--zh); 
 }
 @media (prefers-reduced-motion: reduce) { .water circle { animation: none; opacity: .22; } }
 
-.block { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); border-top: 1px solid var(--hair); }
-.cell { padding: 16px clamp(18px, 4vw, 40px) 18px; display: grid; gap: 6px; align-content: start; min-width: 0; }
-.cell + .cell { border-left: 1px solid var(--hair); }
-.k { margin: 0; font: 400 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--brass); }
-.v { margin: 0; font-size: 14.5px; }
-.v a { text-underline-offset: 3px; text-decoration-color: var(--hair); }
-.v a:hover { text-decoration-color: var(--ink); }
-.v.mono { font: 400 12.5px/1.7 var(--mono); color: var(--ink-2); }
-.ig { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 400 13px var(--mono); }
-.ig svg { width: 22px; height: 22px; }
-.cell.icon { align-content: center; }
-.v.mono a { color: var(--ink); }
-.ig:hover svg { color: var(--ink); }
+/* the piece's name, set vertically beside the water */
+.caption { position: absolute; z-index: 1; right: max(clamp(28px, 7vw, 96px), env(safe-area-inset-right)); top: 42vh; display: flex; flex-direction: column; gap: .7em; font: 400 14px/1 var(--zh); color: var(--ink-2); opacity: .6; margin: 0; }
 
-@media (max-width: 820px) {
-  body { padding: max(96px, env(safe-area-inset-top)) max(40px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(40px, env(safe-area-inset-left)); }
-  .field { grid-template-columns: 1fr; padding-block: 96px 32px; }
-  /* the ripples sit on the sheet's top-right corner and spill out of the frame */
-  .water { position: absolute; top: -240px; right: -235px; width: 460px; max-width: none; margin: 0; }
-  .text { position: relative; }
-  .cell { padding-inline: 14px; }
+@media (max-width: 720px) {
+  .water { top: -4vh; right: -48vw; width: 135vw; }
+  .caption { top: auto; bottom: 34vh; }
 }
 </style>
 </head>
 <body>
-<div class="sheet">
-  <header class="bar">
-    <span>tosaint.github.io</span>
-    <button class="theme" id="theme" type="button" aria-label="Switch colour theme">Light</button>
-  </header>
+<div class="page">
+  <button class="theme" id="theme" type="button" aria-label="Switch colour theme">Light</button>
 
-  <main class="field">
-    <div class="text">
-      <h1>tosaint <span class="zh" lang="zh-Hant">余致賢</span></h1>
-      <a class="enter" href="/portfolio/">Portfolio <span class="line" aria-hidden="true"></span></a>
-    </div>
-
-    <!-- 水聲木 (own work): each turned piece, in plan, drawn only as rings that rise and fade like ripples -->
-    <svg class="water" viewBox="120 150 1140 1080" fill="none" stroke="currentColor" stroke-width=".5" role="img" aria-label="水聲木 in plan: rings that rise and fade where each turned wooden piece lies, like ripples on water">
+  <!-- 水聲木 (own work): each turned piece, in plan, drawn only as rings that rise and fade like ripples -->
+  <svg class="water" viewBox="120 150 1140 1080" fill="none" stroke="currentColor" stroke-width=".5" role="img" aria-label="水聲木 in plan: rings that rise and fade where each turned wooden piece lies, like ripples on water">
       <g class="drop" style="--t:12.1s;--d:-9.0s;--o:0.3"><circle style="--k:0" cx="520" cy="620" r="110.2"/><circle style="--k:1" cx="520" cy="620" r="245"/></g>
       <g class="drop" style="--t:13.7s;--d:-10.1s;--o:0.31"><circle style="--k:0" cx="617" cy="990" r="118.0"/><circle style="--k:1" cx="617" cy="990" r="236"/></g>
       <g class="drop" style="--t:9.1s;--d:-4.2s;--o:0.31"><circle style="--k:0" cx="740" cy="395" r="84.0"/><circle style="--k:1" cx="740" cy="395" r="168"/></g>
@@ -119,22 +97,18 @@ h1 .zh { display: inline-block; font: 300 clamp(24px, 3.6vw, 44px)/1 var(--zh); 
       <g class="drop" style="--t:12.1s;--d:-1.5s;--o:0.2"><circle style="--k:0" cx="1165" cy="585" r="64"/></g>
       <g class="drop" style="--t:13.4s;--d:-2.8s;--o:0.23"><circle style="--k:0" cx="528" cy="207" r="30"/></g>
     </svg>
+  <p class="caption" lang="zh-Hant" aria-label="水聲木"><span>水</span><span>聲</span><span>木</span></p>
+
+  <main>
+    <h1>tosaint <span class="zh" lang="zh-Hant">余致賢</span></h1>
+    <a class="enter" href="/portfolio/">Portfolio <span class="line" aria-hidden="true"></span></a>
   </main>
 
-  <footer class="block">
-    <div class="cell icon">
-      <a class="ig" href="https://www.instagram.com/tosaint" target="_blank" rel="noopener" aria-label="Instagram: @tosaint">
+  <footer class="quiet">
+    <a class="ig" href="https://www.instagram.com/tosaint" target="_blank" rel="noopener" aria-label="Instagram: @tosaint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor" stroke="none"/></svg>
       </a>
-    </div>
-    <div class="cell">
-      <p class="k">Study</p>
-      <p class="v mono"><a href="/portfolio/projects/seen-through/model/?study=1">Survey →</a></p>
-    </div>
-    <div class="cell">
-      <p class="k">Drawing</p>
-      <p class="v mono">水聲木</p>
-    </div>
+    <a href="/portfolio/projects/seen-through/model/?study=1">Survey →</a>
   </footer>
 </div>
 <script>
