@@ -63,6 +63,8 @@ a:focus-visible, button:focus-visible { outline: 1px solid var(--ink-2); outline
 .tap circle { opacity: 0; animation: ring 3.6s cubic-bezier(.2,.6,.3,1) forwards; }
 .tap circle:nth-child(2) { animation-delay: .45s; }
 .tap circle:nth-child(3) { animation-delay: .9s; }
+.tap.trail circle { animation-duration: 2.8s; animation-name: trail; }
+@keyframes trail { 0% { opacity: .35; transform: scale(.1); } 100% { opacity: 0; transform: scale(1); } }
 @keyframes ring { 0% { opacity: .55; transform: scale(.08); } 100% { opacity: 0; transform: scale(1); } }
 
 @media (max-width: 720px) { .water { width: 118vw; top: 44%; } }
@@ -108,22 +110,40 @@ a:focus-visible, button:focus-visible { outline: 1px solid var(--ink-2); outline
 
   // a ripple where the page is touched; links and the button keep their own job
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var NS = "http://www.w3.org/2000/svg";
-  document.addEventListener("pointerdown", function (e) {
-    if (e.target.closest("a, button")) return;
+  var NS = "http://www.w3.org/2000/svg", live = 0;
+  function ripple(x, y, rings, size) {
+    if (live > 14) return;
     var svg = document.createElementNS(NS, "svg");
-    svg.setAttribute("class", "tap"); svg.setAttribute("viewBox", "0 0 240 240");
+    svg.setAttribute("class", rings > 1 ? "tap" : "tap trail"); svg.setAttribute("viewBox", "0 0 240 240");
     svg.setAttribute("fill", "none"); svg.setAttribute("stroke", "currentColor"); svg.setAttribute("stroke-width", ".6");
     svg.setAttribute("aria-hidden", "true");
-    svg.style.left = e.clientX + "px"; svg.style.top = e.clientY + "px";
-    for (var i = 0; i < 3; i++) {
+    svg.style.left = x + "px"; svg.style.top = y + "px";
+    svg.style.width = svg.style.height = size + "px"; svg.style.margin = (-size / 2) + "px 0 0 " + (-size / 2) + "px";
+    for (var i = 0; i < rings; i++) {
       var c = document.createElementNS(NS, "circle");
       c.setAttribute("cx", 120); c.setAttribute("cy", 120); c.setAttribute("r", 118 - i * 26);
       svg.appendChild(c);
     }
-    document.body.appendChild(svg);
-    setTimeout(function () { svg.remove(); }, 5000);
+    document.body.appendChild(svg); live++;
+    setTimeout(function () { svg.remove(); live--; }, 5000);
+  }
+  // touch or click: a stone dropped in the water
+  document.addEventListener("pointerdown", function (e) {
+    if (e.target.closest("a, button")) return;
+    ripple(e.clientX, e.clientY, 3, 240);
   });
+  // a mouse passing over: a single faint ring every so often along the way, like a fingertip on the surface
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    var lx = null, ly = null, lt = 0;
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      var now = performance.now();
+      if (lx !== null && Math.hypot(e.clientX - lx, e.clientY - ly) < 70) return;
+      if (now - lt < 140) return;
+      lx = e.clientX; ly = e.clientY; lt = now;
+      ripple(e.clientX, e.clientY, 1, 90 + Math.random() * 60);
+    });
+  }
 })();
 </script>
 </body>
